@@ -22,13 +22,26 @@ void setup()
 	pinMode(right_forward_pin, OUTPUT);
 }
 
+double readFloat()
+{
+	double ret, mul=1.0;
+	while (Serial.peek()==' ') {
+		Serial.read();
+	}
+	if (Serial.peek()=='-') {
+		mul=-1.0;
+	}
+	ret=(double) Serial.parseFloat();
+	return ret*mul;
+}
+
 void loop()
 {
 	if (Serial.available()) {
 		String s=Serial.readStringUntil(' ');
-		if (s=="?battery" || s=="?battery ") {
+		if (s=="?battery" || s=="?battery ")
 			Serial.println(get_battery_voltage());
-		} else if (s=="!lforw" || s=="!lforw ") {
+		else if (s=="!lforw" || s=="!lforw ") {
 			analogWrite(left_backward_pin, 0);
 			analogWrite(left_forward_pin, Serial.parseInt());
 		} else if (s=="!lback" || s=="!lback ") {
@@ -41,7 +54,9 @@ void loop()
 			analogWrite(right_forward_pin, 0);
 			analogWrite(right_backward_pin, Serial.parseInt());
 		} else if (s=="!steer " || s=="!steer") {
-			control_wheels(Serial.parseFloat(), Serial.parseFloat());
+			double a=readFloat();
+			double b=-readFloat();
+			control_wheels(a, b);
 		} else if (s=="!halt" || s=="!halt ") {
 			halt();
 		}

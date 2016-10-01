@@ -21,23 +21,13 @@ void control_wheels(double velocity, double turn_rate)
         double Vl=(2.0*velocity+turn_rate*body_length)/(2.0*wheel_radius);
         double Vr=(2.0*velocity-turn_rate*body_length)/(2.0*wheel_radius);
 
-	if (Vl > max_speed)
-		Vl=max_speed;
-	else if (Vl <= -max_speed)
-		Vl=-max_speed;
-
-	if (Vr > max_speed)
-		Vr=max_speed;
-	else if (Vr <= -max_speed)
-		Vr=-max_speed;
-	
-
 	int _right=(int) ((255.0)*Vr/max_speed);
 	int _left=(int) ((255.0)*Vl/max_speed);
 
 	set_left_direction(_left > 0 ? true : false);
 	set_right_direction(_right > 0 ? true : false);
 
+	halt();
 	analogWrite(left_forward_pin, _left > 0 ? _left : 0);
 	analogWrite(left_backward_pin, _left <= 0 ? -_left : 0);
 	analogWrite(right_forward_pin, _right > 0 ? _right : 0);
