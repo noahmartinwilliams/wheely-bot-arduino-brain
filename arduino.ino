@@ -20,6 +20,9 @@ void setup()
 	pinMode(left_backward_pin, OUTPUT);
 	pinMode(right_backward_pin, OUTPUT);
 	pinMode(right_forward_pin, OUTPUT);
+	pinMode(red, OUTPUT);
+	pinMode(green, OUTPUT);
+	pinMode(blue, OUTPUT);
 }
 
 double readFloat()
@@ -45,8 +48,23 @@ void loop()
 			double a=readFloat();
 			double b=-readFloat();
 			control_wheels(a, b);
-		} else if (s=="!halt" || s=="!halt ") {
+		} else if (s=="!halt" || s=="!halt ")
 			halt();
-		}
+		else if (s=="!ron" || s=="!ron ") 
+			digitalWrite(red, HIGH);
+		else if (s=="!bon" || s=="!bon ")
+			digitalWrite(blue, HIGH);
+		else if (s=="!gon" || s=="!gon ")
+			digitalWrite(green, HIGH);
+
+		else if (s=="!roff" || s=="!roff ")
+			digitalWrite(red, LOW);
+
+		else if (s=="!goff" || s=="!goff ")
+			digitalWrite(green, LOW);
+
+		else if (s=="!boff" || s=="!boff ") 
+			digitalWrite(blue, LOW);
+		Serial.readStringUntil('\n');
 	}
 }

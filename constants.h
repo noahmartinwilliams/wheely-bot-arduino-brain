@@ -1,6 +1,7 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
+const int red=11, green=12, blue=13;
 const double body_length=18.0;
 const double wheel_radius=3.5;
 const int left_forward_pin=3, left_backward_pin=5;
