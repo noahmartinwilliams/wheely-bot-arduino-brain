@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "constants.h"
 #include "motor.h"
+#include "interrupts.h"
+#include "globals.h"
 
 double fix_angle(double input)
 {
@@ -23,6 +25,9 @@ void setup()
 	pinMode(red, OUTPUT);
 	pinMode(green, OUTPUT);
 	pinMode(blue, OUTPUT);
+	attachInterrupt(left_wheel_encoder, left_interrupt, CHANGE);
+	attachInterrupt(right_wheel_encoder, right_interrupt, CHANGE);
+	interrupts();
 }
 
 double readFloat()
@@ -65,6 +70,27 @@ void loop()
 
 		else if (s=="!boff" || s=="!boff ") 
 			digitalWrite(blue, LOW);
+
+		else if (s=="!rforw" || s=="!rforw ") {
+			analogWrite(right_forward_pin, Serial.parseInt());
+			analogWrite(right_backward_pin, 0);
+		} else if (s=="!rback" || s=="!rback ") {
+			analogWrite(right_backward_pin, Serial.parseInt());
+			analogWrite(right_forward_pin, 0);
+		} else if (s=="!lforw" || s=="!lforw ") {
+			analogWrite(left_forward_pin, Serial.parseInt());
+			analogWrite(left_backward_pin, 0);
+
+		} else if (s=="!lback" || s=="!lback ") {
+			analogWrite(left_backward_pin, Serial.parseInt());
+			analogWrite(left_forward_pin, 0);
+		} else if (s=="?x" || s=="?x ") 
+			Serial.println(_x);
+		else if (s=="?y" || s=="?y ")
+			Serial.println(_y);
+		else if (s=="?theta" || s=="?theta ")
+			Serial.println(theta);
+
 		Serial.readStringUntil('\n');
 	}
 }

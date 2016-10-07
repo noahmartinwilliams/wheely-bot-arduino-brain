@@ -1,10 +1,10 @@
-PROJECT_DIR=/home/pi/wheely/control
+PROJECT_DIR=/home/pi/wheely/src/arduino-brain
 
 ARDMK_DIR=$(PROJECT_DIR)/Arduino-Makefile
 
 ARDUINO_DIR=/usr/share/arduino
 
-USER_LIB_PATH:=$(PROJECT_DIR)/lib
+USER_LIB_PATH:=/home/pi/libraries
 
 BOARD_TAG = uno
 
