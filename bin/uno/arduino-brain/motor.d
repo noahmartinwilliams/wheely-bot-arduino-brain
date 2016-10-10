@@ -9,4 +9,4 @@
  /usr/share/arduino/hardware/arduino/cores/arduino/Printable.h \
  /usr/share/arduino/hardware/arduino/cores/arduino/new.h \
  /usr/share/arduino/hardware/arduino/variants/standard/pins_arduino.h \
- constants.h
+ constants.h globals.h

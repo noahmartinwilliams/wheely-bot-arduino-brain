@@ -1,9 +1,13 @@
 #include "Arduino.h"
 #include "constants.h"
+#include "globals.h"
 
 void set_left_direction(bool dir);
 void set_right_direction(bool dir);
-extern double fix_angle (double input);
+static double fix_angle(double input) 
+{
+	return atan2(sin(input), cos(input));
+}
 void align_with_wall(bool side);
 extern volatile bool left_direction, right_direction;
 
@@ -34,28 +38,27 @@ void control_wheels(double velocity, double turn_rate)
 	analogWrite(right_backward_pin, _right <= 0 ? -_right : 0);
 }
 
-/* void set_angle(double desired_angle)
+
+void set_angle(double desired_angle)
 {
-	double proportional=1.0, integral=5.0, derivative=0.1; //Why does the derivative value need to be so high???
+	double proportional=0.1, integral=0.1, derivative=0.1; 
 	double int_angle=0.0;
-	double eangle=fix_angle(desired_angle-current_angle());
+	double eangle=fix_angle(desired_angle-theta);
 	const double wait_time=0.01;//in seconds
 	double  prev_angle=eangle;
 	double turn_rate;
 
 	while (abs(fix_angle(eangle)) >= max_angle_error) {
-		eangle=fix_angle(desired_angle-current_angle());
-		double int_part=0.0;
-		int_part=integral*int_angle;
+		eangle=fix_angle(desired_angle-theta);
 		
-		turn_rate=proportional*eangle+int_part+derivative*fix_angle(eangle-prev_angle)/wait_time;
+		turn_rate=proportional*eangle+integral*int_angle+derivative*fix_angle(eangle-prev_angle)/wait_time;
 		prev_angle=eangle;
-		int_angle=int_angle+wait_time*eangle;
+		int_angle+=wait_time*eangle;
 		control_wheels(0.0, turn_rate);
 		delay((int) (wait_time*1000.0));
 	}
 	halt();
-} */
+}
 
 /* void turn(double angle)
 {

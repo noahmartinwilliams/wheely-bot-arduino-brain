@@ -4,10 +4,11 @@
 #include "interrupts.h"
 #include "globals.h"
 
-double fix_angle(double input)
+static double fix_angle(double input)
 {
-	return atan2(cos(input), sin(input));
+	return atan2(sin(input), cos(input));
 }
+
 const int battery_pin=A2;
 double get_battery_voltage()
 {
@@ -84,13 +85,16 @@ void loop()
 		} else if (s=="!lback" || s=="!lback ") {
 			analogWrite(left_backward_pin, Serial.parseInt());
 			analogWrite(left_forward_pin, 0);
-		} else if (s=="?x" || s=="?x ") 
+		} else if (s=="!setangle" || s=="!setangle ") {
+			set_angle(Serial.parseFloat());
+		}
+		Serial.readStringUntil('\n');
+		if (s=="?x" || s=="?x ") 
 			Serial.println(_x);
 		else if (s=="?y" || s=="?y ")
 			Serial.println(_y);
 		else if (s=="?theta" || s=="?theta ")
 			Serial.println(theta);
 
-		Serial.readStringUntil('\n');
 	}
 }
