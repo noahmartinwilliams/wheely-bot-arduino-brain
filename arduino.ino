@@ -4,7 +4,7 @@
 #include "interrupts.h"
 #include "globals.h"
 
-static double fix_angle(double input)
+double fix_angle(double input)
 {
 	return atan2(sin(input), cos(input));
 }
@@ -85,8 +85,13 @@ void loop()
 		} else if (s=="!lback" || s=="!lback ") {
 			analogWrite(left_backward_pin, Serial.parseInt());
 			analogWrite(left_forward_pin, 0);
-		} else if (s=="!setangle" || s=="!setangle ") {
+		} else if (s=="!setangle" || s=="!setangle ")
 			set_angle(Serial.parseFloat());
+
+		else if (s=="!goto " || s=="!goto") {
+			double x=readFloat();
+			double y=readFloat();
+			goto_goal(x, y);
 		}
 		Serial.readStringUntil('\n');
 		if (s=="?x" || s=="?x ") 

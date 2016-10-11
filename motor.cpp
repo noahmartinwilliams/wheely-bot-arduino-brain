@@ -4,10 +4,7 @@
 
 void set_left_direction(bool dir);
 void set_right_direction(bool dir);
-static double fix_angle(double input) 
-{
-	return atan2(sin(input), cos(input));
-}
+extern double fix_angle(double input);
 void align_with_wall(bool side);
 extern volatile bool left_direction, right_direction;
 
@@ -41,17 +38,17 @@ void control_wheels(double velocity, double turn_rate)
 
 void set_angle(double desired_angle)
 {
-	double proportional=0.1, integral=0.1, derivative=0.1; 
+	double proportional=1.0, integral=1.0, derivative=2.1; 
 	double int_angle=0.0;
-	double eangle=fix_angle(desired_angle-theta);
-	const double wait_time=0.01;//in seconds
+	double eangle=fix_angle(desired_angle-fix_angle(theta));
+	const double wait_time=0.001;//in seconds
 	double  prev_angle=eangle;
 	double turn_rate;
 
 	while (abs(fix_angle(eangle)) >= max_angle_error) {
 		eangle=fix_angle(desired_angle-theta);
 		
-		turn_rate=proportional*eangle+integral*int_angle+derivative*fix_angle(eangle-prev_angle)/wait_time;
+		turn_rate=proportional*eangle+integral*int_angle+derivative*(eangle-prev_angle)/wait_time;
 		prev_angle=eangle;
 		int_angle+=wait_time*eangle;
 		control_wheels(0.0, turn_rate);
@@ -66,35 +63,26 @@ void set_angle(double desired_angle)
 } */
 
 
-/* int goto_goal(double desired_x, double desired_y, int (*exit_func) ())
+void goto_goal(double desired_x, double desired_y)
 {
 
-	double dx=desired_x-current_x(), dy=desired_y-current_y();
+	double dx=desired_x-_x, dy=desired_y-_y;
 	double distance=sqrt(dx*dx+dy*dy);
 	const double max_dist=1.0;//cm
-	double eangle=fix_angle(atan2(dy, dx)-current_angle());
+	double eangle=fix_angle(atan2(dy, dx)-theta);
 	while (distance > max_dist) {
-		if (exit_func!=NULL) {
-			int ret=exit_func();
-			if (ret!=0) {
-				halt();
-				return ret;
-			}
-		}
-
-		if (abs(eangle) > max_angle_error) {
+		if (abs(eangle) >= 2.0*max_angle_error) {
 			halt();
 			set_angle(atan2(dy, dx));
 		}
-		control_wheels(-10.0, 0.0);
-		dx=desired_x-current_x(); dy=desired_y-current_y();
+		control_wheels(10.0, 0.0);
+		dx=desired_x-_x; dy=desired_y-_y;
 		distance=sqrt(dx*dx+dy*dy);
-		eangle=fix_angle(atan2(dy, dx)-current_angle());
+		eangle=fix_angle(atan2(dy, dx)-theta);
 		delay(1);
 	}
 	halt();
-	return 0;
-} */
+}
 
 /* int forward(double distance, int (*exit_func) ()) //cm
 {
