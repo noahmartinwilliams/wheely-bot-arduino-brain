@@ -1,4 +1,4 @@
-PROJECT_DIR=/home/pi/wheely/src/arduino-brain
+PROJECT_DIR=.
 
 ARDMK_DIR=$(PROJECT_DIR)/Arduino-Makefile
 
