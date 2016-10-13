@@ -3,6 +3,8 @@
 #include "motor.h"
 #include "interrupts.h"
 #include "globals.h"
+#include "accel.h"
+#include "Wire.h"
 
 double fix_angle(double input)
 {
@@ -29,6 +31,9 @@ void setup()
 	attachInterrupt(left_wheel_encoder, left_interrupt, CHANGE);
 	attachInterrupt(right_wheel_encoder, right_interrupt, CHANGE);
 	interrupts();
+
+	Wire.begin();
+	setup_accel();
 }
 
 double readFloat()
@@ -100,6 +105,9 @@ void loop()
 			Serial.println(_y);
 		else if (s=="?theta" || s=="?theta ")
 			Serial.println(theta);
+
+		else if (s=="?ay") 
+			Serial.println(get_y_accel().number());
 
 	}
 }
